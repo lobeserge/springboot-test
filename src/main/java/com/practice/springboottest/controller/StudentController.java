@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/student")
 public class StudentController {
@@ -25,17 +27,17 @@ public class StudentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addStudent(@RequestBody StudentDTO studentDTO){
+    public ResponseEntity<StudentDTO> addStudent(@RequestBody StudentDTO studentDTO){
         return new ResponseEntity(studentService.addStudent(studentDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllStudent(){
+    public ResponseEntity<List<StudentDTO>> getAllStudent(){
         return new ResponseEntity(studentService.getAllStudent(),HttpStatus.OK);
     }
 
     @GetMapping("id/{studentId}")
-    public ResponseEntity<?> getOneStudent(@PathVariable Long studentId){
+    public ResponseEntity<StudentDTO> getOneStudent(@PathVariable Long studentId){
         return new ResponseEntity<>(studentService.getOneStudent(studentId),HttpStatus.OK);
     }
 
@@ -46,7 +48,7 @@ public class StudentController {
     }
 
     @PutMapping("update/{studentId}")
-    public ResponseEntity<?> updateStudent(@PathVariable Long studentId,
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long studentId,
                                            @RequestBody StudentUpdateDTO studentUpdateDTO){
         return new ResponseEntity<>
                 (studentService.updateStudent(studentUpdateDTO,studentId),HttpStatus.OK);

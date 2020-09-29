@@ -5,7 +5,6 @@ import com.practice.springboottest.dto.StudentUpdateDTO;
 import com.practice.springboottest.model.Student;
 import com.practice.springboottest.repository.StudentRepository;
 import com.practice.springboottest.service.ServiceImpl.StudentServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -81,7 +80,7 @@ public class StudentServiceTest {
 
         //call actual service
         List<StudentDTO> studentDTOS = studentService.getAllStudent();
-
+        verify(studentRepository).findAll();
         //assertion
         assertThat(studentDTOS.get(0).getName()).isEqualTo("lobe");
         assertThat(studentDTOS.size()).isEqualTo(students.size());
@@ -115,19 +114,17 @@ public class StudentServiceTest {
         StudentUpdateDTO studentUpdateDTO = new StudentUpdateDTO();
         studentUpdateDTO.setName("serge");
 
+            long Id = 1L;
         Student student = new Student(studentUpdateDTO.getName(),15,"lbt");
-        student.setId((long) 1);
+        student.setId(Id);
 
-        when(studentRepository.findById((long)1)).thenReturn(Optional.of(student));
+        when(studentRepository.findById(Id)).thenReturn(Optional.of(student));
 
-        StudentDTO studentDTO = studentService.updateStudent(studentUpdateDTO, (long) 1);
+        StudentDTO studentDTO = studentService.updateStudent(studentUpdateDTO, Id);
 
         verify(studentRepository).findById((long)1);
         assertThat(studentDTO).isNotNull();
         assertThat(studentDTO.getName()).isEqualTo("serge");
-       // assertThat(studentDTO.getAge()).isEqualTo(12);
-
+        assertThat(studentDTO.getAge()).isEqualTo(15);
     }
-
-
 }
